@@ -11,6 +11,7 @@ import planeSimpleVertexShader from "@/shaders/planeSimple.vertex.glsl";
 import planeSimpleFragmentShader from "@/shaders/planeSimple.fragment.glsl";
 
 import gsap from "gsap";
+import { TSLPlane } from "./TSLPlane";
 
 export default class ThreeEngine {
   // Static variable to force renderer type
@@ -28,6 +29,8 @@ export default class ThreeEngine {
   private shaderMaterial: THREE.ShaderMaterial;
   private shaderMaterialSimple: THREE.ShaderMaterial;
 
+  private tslPlane: TSLPlane;
+
   constructor(app: App) {
     this.app = app;
 
@@ -40,6 +43,8 @@ export default class ThreeEngine {
     this.initTestPlaneShader();
     this.initSimpleShaderPlane();
     this.initControls();
+
+    this.initTSLPlane();
   }
 
   private initThree(): void {
@@ -328,6 +333,18 @@ export default class ThreeEngine {
     this.scene.add(simpleShaderPlane);
   }
 
+  private initTSLPlane(): void {
+    this.tslPlane = new TSLPlane({
+      width: 6,
+      height: 6,
+      widthSegments: 128,
+      heightSegments: 128,
+      position: new THREE.Vector3(8, 0, 0), // Posizionalo a fianco agli altri
+    });
+
+    this.scene.add(this.tslPlane.mesh);
+  }
+
   update(): void {
     if (this.controls) this.controls.update();
 
@@ -342,6 +359,9 @@ export default class ThreeEngine {
 
     if (this.shaderMaterialSimple) {
       this.shaderMaterialSimple.uniforms.uTime.value = performance.now() * 0.01;
+    }
+    if (this.tslPlane) {
+      this.tslPlane.update(performance.now());
     }
   }
 
