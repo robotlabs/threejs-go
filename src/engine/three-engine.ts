@@ -34,7 +34,7 @@ export default class ThreeEngine {
   constructor(app: App) {
     this.app = app;
 
-    this.forceRenderer = "webgpu";
+    this.forceRenderer = "webgl2";
     this.initThree();
     this.initLights();
     this.initGrid();
